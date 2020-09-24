@@ -14,4 +14,16 @@ create table Sales (SalesID int, ProductID int, Quantity int, UnitPrice float, D
 
 * Create an Entity Relationship Diagram to show the relationships between the tables. 
 
-See ERD.
+See ERD.png file in repo.
+
+* Write queries for the following
+
+1. The most popular product sold on a specific date (2020, 08, 15).  
+
+select Product.ProductName, Sales.ProductID, count(*) as Popularity, Sales.DateOfSale from Product, Sales where Sales.ProductID = Product.ProductID and DateOfSale = '2020-08-15' group by DateOfSale, Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales group by DateOfSale, ProductID) as myTable); 
+
+2. The most popular product sold last week.
+
+select Product.ProductName, Sales.ProuctID, count(*) as Popularity, week(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and week(DateOfSale) = week(curdate()) - 1 and year(DateOfSale) = year(curdate()) group by week(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales group by DateOfSale, ProductID) as myTable);
+
+3. The most popular product sold on a specific month.
