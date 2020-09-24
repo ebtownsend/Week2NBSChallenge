@@ -1,0 +1,17 @@
+* Create database for shop.
+
+create database shop;
+use shop;
+
+* Create 4 tables within the database.
+
+create table Category (CategoryID int, CategoryName char(20));
+create table Subcategory (SubCategoryID int, CategoryID int, SubCategoryName char(20));
+create table Product (SubCategoryID int, ProductID int, ProductName char(20));
+create table Sales (SalesID int, ProductID int, Quantity int, UnitPrice float, DateOfSale date);
+
+* Populate the tables with dummy data.
+
+* Create an Entity Relationship Diagram to show the relationships between the tables. 
+
+See ERD.
