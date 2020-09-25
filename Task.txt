@@ -80,11 +80,17 @@ See ERD.png file in repo.
 
 1. The most popular product sold on a specific date (2020, 08, 15). - WORKS
 
-select Product.ProductName, Sales.ProductID, count(*) as Popularity, Sales.DateOfSale from Product, Sales where Sales.ProductID = Product.ProductID and DateOfSale = '2020-08-15' group by DateOfSale, Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales group by DateOfSale, ProductID) as myTable); 
+select Product.ProductName, Sales.ProductID, count(*) as Popularity, Sales.DateOfSale from Product, Sales where Sales.ProductID = Product.ProductID and DateOfSale = '2020-08-15' group by DateOfSale, Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales where DateOfSale = '2020-08-15' group by DateOfSale, ProductID) as myTable);
 
 2. The most popular product sold last week. - ?
 
+(This week)
 select Product.ProductName, Sales.ProductID, count(*) as Popularity, week(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and week(DateOfSale) = week(curdate()) - 1 and year(DateOfSale) = year(curdate()) group by week(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales group by DateOfSale, ProductID) as myTable);
+
+---
+
+(last week)
+select Product.ProductName, Sales.ProductID, count(*) as Popularity, week(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and week(DateOfSale) = week(curdate())-1 and year(DateOfSale) = year(curdate()) group by week(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales where week(DateOfSale) = week(curdate())-1 and year(DateOfSale) = year(curdate()) group by DateOfSale, ProductID) as myTable);
 
 3. The most popular product sold on a specific month (08). - WORKS
 
@@ -92,7 +98,7 @@ select Product.ProductName, Sales.ProductID, count(*) as Popularity, month(Sales
 
 4. The most popular subcategory for a specific date (2020, 08, 15). - WORKS
 
-select SubCategoryName, count(*) as Popularity, DateOfSale from Product join Sales on Product.ProductID = Sales.ProductID join Subcategory on Subcategory.SubCategoryID = Product.SubCategoryID where DateOfSale = '2020-08-15' group by DateOfSale, SubCategoryName having count(*) = (select max(r) from (select count(*) as r, Subcategory.SubcategoryID from  Product join Sales on Product.ProductID = Sales.ProductID join Subcategory on Subcategory.SubCategoryID = Product.SubCategoryID group by DateOfSale, Subcategory.SubCategoryID) as myTable);
+select SubCategoryName, count(*) as Popularity, DateOfSale from Product join Sales on Product.ProductID = Sales.ProductID join Subcategory on Subcategory.SubCategoryID = Product.SubCategoryID where DateOfSale = '2020-08-15' group by DateOfSale, SubCategoryName having count(*) = (select max(r) from (select count(*) as r, Subcategory.SubcategoryID from  Product join Sales on Product.ProductID = Sales.ProductID join Subcategory on Subcategory.SubCategoryID = Product.SubCategoryID where DateOfSale = '2020-08-15' group by DateOfSale, Subcategory.SubCategoryID) as myTable);
 
 5. The most popular subcategory for last week. - ?
 
