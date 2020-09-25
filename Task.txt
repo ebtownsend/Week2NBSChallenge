@@ -99,3 +99,7 @@ select SubCategoryName, count(*) as Popularity, DateOfSale from Product join Sal
 select SubCategoryName, count(*) as Popularity, week(DateOfSale) from Product join Sales on Product.ProductID = Sales.ProductID join Subcategory on Subcategory.SubCategoryID = Product.SubCategoryID where week(DateOfSale) = week(curdate()) - 1 and year(DateOfSale) = year(curdate()) group by week(DateOfSale), SubCategoryName having count(*) = (select max(r) from (select count(*) as r, Subcategory.SubcategoryID from  Product join Sales on Product.ProductID = Sales.ProductID join Subcategory on Subcategory.SubCategoryID = Product.SubCategoryID group by DateOfSale, Subcategory.SubCategoryID) as myTable);
 
 
+select subcategoryname from subcategorydetails where week(dateofsale) = week(curdate())-1 group by subcategoryname having count(*) =(select max(num) from (select count(*) as num from subcategorydetails where week(dateofsale) = week(curdate())-1 group by
+ subcategoryname) as table1); - try this
+
+
