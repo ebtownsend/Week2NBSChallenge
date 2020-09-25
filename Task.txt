@@ -84,12 +84,6 @@ select Product.ProductName, Sales.ProductID, count(*) as Popularity, Sales.DateO
 
 2. The most popular product sold last week. - WORKS
 
-(This week)
-select Product.ProductName, Sales.ProductID, count(*) as Popularity, week(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and week(DateOfSale) = week(curdate()) - 1 and year(DateOfSale) = year(curdate()) group by week(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales group by DateOfSale, ProductID) as myTable);
-
----
-
-(last week)
 select Product.ProductName, Sales.ProductID, count(*) as Popularity, week(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and week(DateOfSale) = (week(curdate())-1) and year(DateOfSale) = year(curdate()) group by week(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales where week(DateOfSale) = (week(curdate())-1) and year(DateOfSale) = year(curdate()) group by week(DateOfSale), ProductID) as myTable);
 
 3. The most popular product sold on a specific month (08). - WORKS
