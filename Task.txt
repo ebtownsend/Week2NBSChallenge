@@ -89,12 +89,12 @@ select Product.ProductName, Sales.ProductID, count(*) as Popularity, week(Sales.
 
 ---
 
-(last week)
+(last week) - not working
 select Product.ProductName, Sales.ProductID, count(*) as Popularity, week(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and week(DateOfSale) = week(curdate())-1 and year(DateOfSale) = year(curdate()) group by week(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales where week(DateOfSale) = week(curdate())-1 and year(DateOfSale) = year(curdate()) group by DateOfSale, ProductID) as myTable);
 
 3. The most popular product sold on a specific month (08). - WORKS
 
-select Product.ProductName, Sales.ProductID, count(*) as Popularity, month(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and month(DateOfSale) = '08' and year(DateOfSale) = year(curdate()) group by month(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales group by month(DateOfSale), ProductID) as myTable);
+select Product.ProductName, Sales.ProductID, count(*) as Popularity, month(Sales.DateOfSale) from Product, Sales where Sales.ProductID = Product.ProductID and month(DateOfSale) = '08' and year(DateOfSale) = year(curdate()) group by month(DateOfSale), Sales.ProductID having count(*) = (select max(r) from (select count(*) as r, ProductID from Sales where month(DateOfSale) = '08' group by month(DateOfSale), ProductID) as myTable);
 
 4. The most popular subcategory for a specific date (2020, 08, 15). - WORKS
 
